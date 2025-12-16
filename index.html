@@ -4,7 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Contador Brasil</title>
-  <meta name="description" content="Contador en hora de Brasil" />
+  <meta name="description" content="Contador en hora de Brasil + galería + comentarios" />
+
   <style>
     :root { color-scheme: dark; }
     body {
@@ -13,28 +14,35 @@
       display: grid;
       place-items: center;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background: radial-gradient(1200px 600px at 20% 10%, #2dd4bf33, transparent),
-                  radial-gradient(900px 500px at 80% 30%, #60a5fa33, transparent),
-                  #0b1020;
+      background:
+        radial-gradient(1200px 600px at 20% 10%, #2dd4bf33, transparent),
+        radial-gradient(900px 500px at 80% 30%, #60a5fa33, transparent),
+        #0b1020;
       color: #e8eefc;
+      padding: 20px 0;
     }
+
+    .wrap { width: min(900px, calc(100% - 32px)); display: grid; gap: 14px; }
+
     .card {
-      width: min(720px, calc(100% - 32px));
-      padding: 28px;
+      padding: 26px;
       border-radius: 20px;
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.12);
       box-shadow: 0 18px 60px rgba(0,0,0,0.35);
       backdrop-filter: blur(10px);
     }
-    h1 { margin: 0 0 6px; font-size: clamp(24px, 4vw, 34px); letter-spacing: .2px; }
-    .sub { margin: 0 0 18px; opacity: .85; line-height: 1.35; }
+
+    h1 { margin: 0 0 6px; font-size: clamp(24px, 4vw, 34px); }
+    .sub { margin: 0 0 16px; opacity: .85; line-height: 1.35; }
+
     .row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
-      margin: 18px 0 10px;
+      margin: 14px 0 10px;
     }
+
     .box {
       padding: 16px 14px;
       border-radius: 16px;
@@ -42,10 +50,12 @@
       border: 1px solid rgba(255,255,255,0.10);
       text-align: center;
     }
+
     .num { font-size: clamp(26px, 6vw, 46px); font-weight: 800; }
     .lbl { opacity: .8; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+
     .footer {
-      margin-top: 14px;
+      margin-top: 12px;
       display: flex;
       justify-content: space-between;
       gap: 10px;
@@ -53,51 +63,156 @@
       opacity: .85;
       font-size: 13px;
     }
+
     .tag {
       padding: 8px 10px;
       border-radius: 999px;
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.12);
     }
-    @media (max-width: 520px) { .row { grid-template-columns: repeat(2, 1fr); } }
+
+    /* Galería */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .ph {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.22);
+    }
+    .ph img { width: 100%; height: 180px; object-fit: cover; display: block; }
+    .cap { padding: 10px 12px; opacity: .9; font-size: 13px; }
+
+    /* Comentarios */
+    .comments {
+      display: grid;
+      gap: 10px;
+    }
+    .fieldrow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    input, textarea, button {
+      font: inherit;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.25);
+      color: #e8eefc;
+      padding: 12px 12px;
+      outline: none;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    button {
+      cursor: pointer;
+      font-weight: 700;
+      background: rgba(255,255,255,0.10);
+    }
+    button:hover { background: rgba(255,255,255,0.14); }
+
+    .list {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .item {
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.22);
+    }
+    .meta { opacity: .75; font-size: 12px; margin-bottom: 6px; display:flex; gap:8px; flex-wrap:wrap; }
+    .name { font-weight: 800; opacity: .95; }
+    .actions { margin-top: 8px; display:flex; gap:8px; }
+    .small { padding: 8px 10px; border-radius: 12px; font-size: 13px; }
+
+    @media (max-width: 720px) { .gallery { grid-template-columns: 1fr; } .ph img { height: 210px; } }
+    @media (max-width: 520px) { .row { grid-template-columns: repeat(2, 1fr); } .fieldrow { grid-template-columns: 1fr; } }
   </style>
 </head>
 
 <body>
-  <main class="card">
-    <h1 id="title">Faltan…</h1>
-    <p class="sub" id="desc">Contador en hora de Brasil (São Paulo). Cambiá la fecha en el código.</p>
+  <div class="wrap">
+    <!-- CONTADOR -->
+    <main class="card">
+      <h1 id="title">Faltan… 🇧🇷</h1>
+      <p class="sub" id="desc">Contador en hora de Brasil (São Paulo) hacia el <b>2 de enero</b>.</p>
 
-    <section class="row" aria-label="contador">
-      <div class="box"><div class="num" id="d">0</div><div class="lbl">Días</div></div>
-      <div class="box"><div class="num" id="h">00</div><div class="lbl">Horas</div></div>
-      <div class="box"><div class="num" id="m">00</div><div class="lbl">Minutos</div></div>
-      <div class="box"><div class="num" id="s">00</div><div class="lbl">Segundos</div></div>
+      <section class="row" aria-label="contador">
+        <div class="box"><div class="num" id="d">0</div><div class="lbl">Días</div></div>
+        <div class="box"><div class="num" id="h">00</div><div class="lbl">Horas</div></div>
+        <div class="box"><div class="num" id="m">00</div><div class="lbl">Minutos</div></div>
+        <div class="box"><div class="num" id="s">00</div><div class="lbl">Segundos</div></div>
+      </section>
+
+      <div class="footer">
+        <span class="tag" id="targetTxt">🎯 Objetivo (BR): —</span>
+        <span class="tag" id="nowTxt">🕒 Ahora (BR): —</span>
+      </div>
+    </main>
+
+    <!-- IMÁGENES -->
+    <section class="card">
+      <h1 style="margin-bottom:10px;">Brasil en 3 postales</h1>
+      <p class="sub" style="margin-bottom:12px;">Podés cambiar las URLs por las fotos que quieras.</p>
+
+      <div class="gallery">
+        <div class="ph">
+          <img alt="Cristo Redentor" src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Cristo_Redentor_-_Rio_de_Janeiro%2C_Brasil.jpg">
+          <div class="cap">Rio de Janeiro — Cristo Redentor</div>
+        </div>
+        <div class="ph">
+          <img alt="Cataratas del Iguazú" src="https://upload.wikimedia.org/wikipedia/commons/4/40/Iguazu_Falls_2.jpg">
+          <div class="cap">Foz do Iguaçu — Cataratas</div>
+        </div>
+        <div class="ph">
+          <img alt="Pelourinho, Salvador" src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Pelourinho_Salvador_Bahia_Brazil.jpg">
+          <div class="cap">Salvador — Pelourinho</div>
+        </div>
+      </div>
     </section>
 
-    <div class="footer">
-      <span class="tag" id="targetTxt">🎯 Objetivo: —</span>
-      <span class="tag" id="nowTxt">🕒 Ahora (BR): —</span>
-    </div>
-  </main>
+    <!-- COMENTARIOS (LOCAL, sin backend) -->
+    <section class="card comments">
+      <h1 style="margin-bottom:6px;">Comentarios</h1>
+      <p class="sub" style="margin-bottom:6px;">
+        Esto guarda comentarios en tu navegador (no son públicos). Si querés comentarios públicos, abajo te dejo opción Giscus.
+      </p>
+
+      <div class="fieldrow">
+        <input id="name" maxlength="40" placeholder="Tu nombre" />
+        <input id="city" maxlength="40" placeholder="Ciudad (opcional)" />
+      </div>
+      <textarea id="text" maxlength="500" placeholder="Escribí tu comentario…"></textarea>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button id="add">Publicar</button>
+        <button id="clear" class="small">Borrar todos (local)</button>
+      </div>
+
+      <div class="list" id="list"></div>
+    </section>
+  </div>
 
   <script>
     // =========================
-    // CONFIGURACIÓN
+    // CONTADOR: 2 de enero 2026 (Brasil -03:00)
     // =========================
-    // 1) Elegí el momento objetivo en Brasil (São Paulo).
-    // Formato ISO con offset -03:00 (Brasil puede variar por región; São Paulo suele ser -03).
-    // Ejemplo: 2026-01-10T21:00:00-03:00
-    const TARGET_ISO_BR = "2026-01-10T21:00:00-03:00";
-
     const TIMEZONE = "America/Sao_Paulo";
+
+    // Cambiá la hora si querés (ej 21:00:00-03:00)
+    const TARGET_ISO_BR = "2026-01-02T00:00:00-03:00";
+
     const titleEl = document.getElementById("title");
     const targetTxt = document.getElementById("targetTxt");
     const nowTxt = document.getElementById("nowTxt");
 
     const pad2 = (n) => String(n).padStart(2, "0");
 
-    // Mostrar fecha bonita en hora de Brasil
     function formatInBrazil(date) {
       return new Intl.DateTimeFormat("es-AR", {
         timeZone: TIMEZONE,
@@ -121,7 +236,7 @@
       const diff = targetDate - now;
 
       if (diff <= 0) {
-        titleEl.textContent = "¡Llegó el momento! 🎉";
+        titleEl.textContent = "¡Feliz 2 de enero! 🎉🇧🇷";
         document.getElementById("d").textContent = "0";
         document.getElementById("h").textContent = "00";
         document.getElementById("m").textContent = "00";
@@ -135,7 +250,7 @@
       const minutes = Math.floor((totalSeconds % 3600) / 60);
       const seconds = totalSeconds % 60;
 
-      titleEl.textContent = `Faltan ${days} días`;
+      titleEl.textContent = `Faltan ${days} días 🇧🇷`;
       document.getElementById("d").textContent = String(days);
       document.getElementById("h").textContent = pad2(hours);
       document.getElementById("m").textContent = pad2(minutes);
@@ -144,6 +259,87 @@
 
     tick();
     setInterval(tick, 1000);
+
+    // =========================
+    // COMENTARIOS (LocalStorage)
+    // =========================
+    const KEY = "br_countdown_comments_v1";
+    const nameEl = document.getElementById("name");
+    const cityEl = document.getElementById("city");
+    const textEl = document.getElementById("text");
+    const listEl = document.getElementById("list");
+
+    function loadComments() {
+      try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
+      catch { return []; }
+    }
+
+    function saveComments(items) {
+      localStorage.setItem(KEY, JSON.stringify(items));
+    }
+
+    function render() {
+      const items = loadComments();
+      if (!items.length) {
+        listEl.innerHTML = `<div class="item" style="opacity:.8;">Todavía no hay comentarios.</div>`;
+        return;
+      }
+
+      listEl.innerHTML = items
+        .slice().reverse()
+        .map((c, idxFromEnd) => {
+          const idx = items.length - 1 - idxFromEnd;
+          const meta = `${c.name}${c.city ? " · " + c.city : ""} · ${new Date(c.at).toLocaleString("es-AR")}`;
+          return `
+            <div class="item">
+              <div class="meta"><span class="name">${escapeHtml(c.name)}</span><span>${escapeHtml(c.city || "")}</span><span>${escapeHtml(new Date(c.at).toLocaleString("es-AR"))}</span></div>
+              <div>${escapeHtml(c.text)}</div>
+              <div class="actions">
+                <button class="small" onclick="deleteComment(${idx})">Eliminar</button>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    window.deleteComment = function(i) {
+      const items = loadComments();
+      items.splice(i, 1);
+      saveComments(items);
+      render();
+    };
+
+    document.getElementById("add").addEventListener("click", () => {
+      const name = (nameEl.value || "").trim() || "Anónimo";
+      const city = (cityEl.value || "").trim();
+      const text = (textEl.value || "").trim();
+
+      if (!text) return;
+
+      const items = loadComments();
+      items.push({ name, city, text, at: Date.now() });
+      saveComments(items);
+
+      textEl.value = "";
+      render();
+    });
+
+    document.getElementById("clear").addEventListener("click", () => {
+      localStorage.removeItem(KEY);
+      render();
+    });
+
+    render();
   </script>
 </body>
 </html>
