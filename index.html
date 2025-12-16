@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contador Brasil</title>
+  <meta name="description" content="Contador en hora de Brasil" />
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 600px at 20% 10%, #2dd4bf33, transparent),
+                  radial-gradient(900px 500px at 80% 30%, #60a5fa33, transparent),
+                  #0b1020;
+      color: #e8eefc;
+    }
+    .card {
+      width: min(720px, calc(100% - 32px));
+      padding: 28px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
+    }
+    h1 { margin: 0 0 6px; font-size: clamp(24px, 4vw, 34px); letter-spacing: .2px; }
+    .sub { margin: 0 0 18px; opacity: .85; line-height: 1.35; }
+    .row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 18px 0 10px;
+    }
+    .box {
+      padding: 16px 14px;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.22);
+      border: 1px solid rgba(255,255,255,0.10);
+      text-align: center;
+    }
+    .num { font-size: clamp(26px, 6vw, 46px); font-weight: 800; }
+    .lbl { opacity: .8; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+    .footer {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      opacity: .85;
+      font-size: 13px;
+    }
+    .tag {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    @media (max-width: 520px) { .row { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <h1 id="title">Faltan…</h1>
+    <p class="sub" id="desc">Contador en hora de Brasil (São Paulo). Cambiá la fecha en el código.</p>
+
+    <section class="row" aria-label="contador">
+      <div class="box"><div class="num" id="d">0</div><div class="lbl">Días</div></div>
+      <div class="box"><div class="num" id="h">00</div><div class="lbl">Horas</div></div>
+      <div class="box"><div class="num" id="m">00</div><div class="lbl">Minutos</div></div>
+      <div class="box"><div class="num" id="s">00</div><div class="lbl">Segundos</div></div>
+    </section>
+
+    <div class="footer">
+      <span class="tag" id="targetTxt">🎯 Objetivo: —</span>
+      <span class="tag" id="nowTxt">🕒 Ahora (BR): —</span>
+    </div>
+  </main>
+
+  <script>
+    // =========================
+    // CONFIGURACIÓN
+    // =========================
+    // 1) Elegí el momento objetivo en Brasil (São Paulo).
+    // Formato ISO con offset -03:00 (Brasil puede variar por región; São Paulo suele ser -03).
+    // Ejemplo: 2026-01-10T21:00:00-03:00
+    const TARGET_ISO_BR = "2026-01-10T21:00:00-03:00";
+
+    const TIMEZONE = "America/Sao_Paulo";
+    const titleEl = document.getElementById("title");
+    const targetTxt = document.getElementById("targetTxt");
+    const nowTxt = document.getElementById("nowTxt");
+
+    const pad2 = (n) => String(n).padStart(2, "0");
+
+    // Mostrar fecha bonita en hora de Brasil
+    function formatInBrazil(date) {
+      return new Intl.DateTimeFormat("es-AR", {
+        timeZone: TIMEZONE,
+        weekday: "short",
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }).format(date);
+    }
+
+    const targetDate = new Date(TARGET_ISO_BR);
+    targetTxt.textContent = "🎯 Objetivo (BR): " + formatInBrazil(targetDate);
+
+    function tick() {
+      const now = new Date();
+      nowTxt.textContent = "🕒 Ahora (BR): " + formatInBrazil(now);
+
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        titleEl.textContent = "¡Llegó el momento! 🎉";
+        document.getElementById("d").textContent = "0";
+        document.getElementById("h").textContent = "00";
+        document.getElementById("m").textContent = "00";
+        document.getElementById("s").textContent = "00";
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      titleEl.textContent = `Faltan ${days} días`;
+      document.getElementById("d").textContent = String(days);
+      document.getElementById("h").textContent = pad2(hours);
+      document.getElementById("m").textContent = pad2(minutes);
+      document.getElementById("s").textContent = pad2(seconds);
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
